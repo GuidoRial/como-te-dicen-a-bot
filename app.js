@@ -10,6 +10,11 @@ app.get("/quotes", (req, res) => {
     res.json({ quote: quotes[index] });
 });
 
+app.use(express.static(path.join(__dirname, "./bot")));
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "./bot"));
+});
+
 const start = async () => {
     try {
         app.listen(PORT, () => {
