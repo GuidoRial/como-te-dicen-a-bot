@@ -54,9 +54,11 @@ function sendStartMessage(ctx) {
 }
 
 bot.command("help", (ctx) => {
+    console.log(ctx.chat);
     bot.telegram.sendMessage(ctx.chat.id, "Escribí /start");
 });
-
+//http://localhost:3000/quotes
+//https://como-te-dicen-a-bot-server.herokuapp.com/quotes
 async function fetchQuote() {
     const res = await axios.get(
         "https://como-te-dicen-a-bot-server.herokuapp.com/quotes"
@@ -69,8 +71,7 @@ async function fetchQuote() {
  */
 bot.hears("Como me dicen?", async (ctx) => {
     const quote = await fetchQuote();
-    ctx.reply(`Sabes como te dicen a vos @${ctx.chat.username}? ${quote}`);
-    // console.log(ctx.message.text);
+    ctx.reply(`Sabes como te dicen a vos? ${quote}`);
 });
 
 /**
@@ -82,9 +83,13 @@ bot.mention(async (ctx) => {
         .replace("@ComoTeDicenABot", "")
         .replace(/\s+/g, "");
     const probabilityOfSetPhrase = Math.floor(Math.random() * 10);
+    const quote = await fetchQuote();
     //console.log(ctx.chat.type);//supergroup
     // console.log(ctx.update.message.from.username); //returns my username
-    if (anotherUser === thisBot) {
+    if (
+        anotherUser === thisBot ||
+        anotherUser.toLowerCase() === thisBot.toLowerCase()
+    ) {
         ctx.reply("No quieras hacer cagadas salame");
         return;
     }
@@ -93,14 +98,13 @@ bot.mention(async (ctx) => {
         //Another person has ben tagged
         if (anotherUser === "@MengOtto" && probabilityOfSetPhrase < 8) {
             ctx.reply(
-                `Saben como le dicen a ${anotherUser}? Mono manco, porque pela bananas con el culo`
+                `Saben como le dicen a ${anotherUser}? Mono manco, porque pela la banana con el culo`
             );
         } else {
             if (probabilityOfSetPhrase < 2) {
                 const nameOfUser = anotherUser.slice(1);
                 ctx.reply(`${nameOfUser} le dicen, no sean malos :(`);
             } else {
-                const quote = await fetchQuote();
                 ctx.reply(`Saben como le dicen a ${anotherUser}? ${quote}`);
             }
         }
@@ -108,7 +112,6 @@ bot.mention(async (ctx) => {
         //Bot has been tagged alone
         const userInSuperGroup = ctx.update.message.from.username;
         if (userInSuperGroup) {
-            const quote = await fetchQuote();
             if (probabilityOfSetPhrase < 2) {
                 ctx.reply(
                     `Sabes como te dicen a vos @${userInSuperGroup}? ${userInSuperGroup}, no seas malo con vos mismo :(`
@@ -119,7 +122,6 @@ bot.mention(async (ctx) => {
                 );
             }
         } else {
-            const quote = await fetchQuote();
             ctx.reply(
                 `Sabes como te dicen a vos @${ctx.chat.username}? ${quote}`
             );
@@ -137,14 +139,14 @@ bot.action("credits", (ctx) => {
 bot.action("quote", async (ctx) => {
     ctx.answerCbQuery();
     const quote = await fetchQuote();
-    ctx.reply(`Sabes como te dicen a vos @${ctx.chat.username}? ${quote}`);
+    ctx.reply(`Sabes como te dicen a vos? ${quote}`);
 });
 
 /*--------------------------------------------------------------- */
-app.use(express.static(path.join(__dirname, "./bot")));
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "./bot"));
-});
+// app.use(express.static(path.join(__dirname, "./bot")));
+// app.get("*", (req, res) => {
+//     res.sendFile(path.join(__dirname, "./bot"));
+// });
 
 const start = async () => {
     try {
