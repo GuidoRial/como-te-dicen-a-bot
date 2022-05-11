@@ -10,7 +10,7 @@
         "heroku-postbuild": "npm install && node bot.js",
         "server": "nodemon server.js",
         "develop": "concurrently --kill-others-on-fail \"npm run server\" \"npm run start --prefix client\"",
-        "start": "node app.js"
+        "start": "node bot.js"
     },
     "keywords": [],
     "author": "",
