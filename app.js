@@ -102,7 +102,12 @@ bot.mention(async (ctx) => {
             );
         } else {
             if (probabilityOfSetPhrase < 2) {
-                const nameOfUser = anotherUser.slice(1);
+                let nameOfUser;
+                if (anotherUser.startsWith("@")) {
+                    nameOfUser = anotherUser.slice(1);
+                } else {
+                    nameOfUser = anotherUser;
+                }
                 ctx.reply(`${nameOfUser} le dicen, no sean malos :(`);
             } else {
                 ctx.reply(`Saben como le dicen a ${anotherUser}? ${quote}`);
