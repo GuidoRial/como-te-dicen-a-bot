@@ -49,12 +49,6 @@ async function fetchQuote() {
     return res.data.quote;
 }
 
-bot.hears("test", (ctx) => {
-    bot.botInfo["can_read_all_group_messages"] = true;
-    bot.botInfo["supports_inline_queries"] = true;
-    console.log(bot.botInfo);
-});
-
 /**
  * Mostly to use with oneself
  */
@@ -75,11 +69,11 @@ bot.mention(async (ctx) => {
     const probabilityOfSetPhrase = Math.floor(Math.random() * 10);
     //console.log(ctx.chat.type);//supergroup
     // console.log(ctx.update.message.from.username); //returns my username
-
     if (anotherUser === thisBot) {
         ctx.reply("No quieras hacer cagadas salame");
-        return
+        return;
     }
+
     if (ctx.message.text.length > thisBot.length) {
         //Another person has ben tagged
         if (anotherUser === "@MengOtto" && probabilityOfSetPhrase < 8) {
@@ -92,7 +86,6 @@ bot.mention(async (ctx) => {
         }
     } else {
         //Bot has been tagged alone
-
         const userInSuperGroup = ctx.update.message.from.username;
         if (userInSuperGroup) {
             const quote = await fetchQuote();
