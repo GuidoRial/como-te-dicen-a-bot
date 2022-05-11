@@ -1,8 +1,13 @@
 require("dotenv").config();
 const { Telegraf } = require("telegraf");
 const axios = require("axios");
+const express = require("express");
+const app = express();
+const path = require("path");
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
+
+const PORT = process.env.PORT || 4000;
 
 bot.command("start", (ctx) => {
     sendStartMessage(ctx);
@@ -45,7 +50,9 @@ bot.command("help", (ctx) => {
 });
 
 async function fetchQuote() {
-    const res = await axios.get("http://localhost:3000/quotes");
+    const res = await axios.get(
+        "https://como-te-dicen-a-bot-server.herokuapp.com/quotes"
+    );
     return res.data.quote;
 }
 
@@ -114,4 +121,15 @@ bot.action("quote", async (ctx) => {
     ctx.reply(`Sabes como te dicen a vos @${ctx.chat.username}? ${quote}`);
 });
 
-bot.launch();
+
+const start = async () => {
+    try {
+        app.listen(PORT, () => {
+            bot.launch();
+        });
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+start();
