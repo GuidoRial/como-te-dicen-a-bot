@@ -88,17 +88,28 @@ bot.mention(async (ctx) => {
                 `Saben como le dicen a ${anotherUser}? Mono manco, porque pela bananas con el culo`
             );
         } else {
-            const quote = await fetchQuote();
-            ctx.reply(`Saben como le dicen a ${anotherUser}? ${quote}`);
+            if (probabilityOfSetPhrase < 2) {
+                const nameOfUser = anotherUser.slice(1);
+                ctx.reply(`${nameOfUser} le dicen, no sean malos :(`);
+            } else {
+                const quote = await fetchQuote();
+                ctx.reply(`Saben como le dicen a ${anotherUser}? ${quote}`);
+            }
         }
     } else {
         //Bot has been tagged alone
         const userInSuperGroup = ctx.update.message.from.username;
         if (userInSuperGroup) {
             const quote = await fetchQuote();
-            ctx.reply(
-                `Sabes como te dicen a vos @${userInSuperGroup}? ${quote}`
-            );
+            if (probabilityOfSetPhrase < 2) {
+                ctx.reply(
+                    `Sabes como te dicen a vos @${userInSuperGroup}? ${userInSuperGroup} no seas malo con vos mismo :(`
+                );
+            } else {
+                ctx.reply(
+                    `Sabes como te dicen a vos @${userInSuperGroup}? ${quote}`
+                );
+            }
         } else {
             const quote = await fetchQuote();
             ctx.reply(
@@ -120,6 +131,7 @@ bot.action("quote", async (ctx) => {
     const quote = await fetchQuote();
     ctx.reply(`Sabes como te dicen a vos @${ctx.chat.username}? ${quote}`);
 });
+
 
 
 const start = async () => {
