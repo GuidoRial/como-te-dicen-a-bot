@@ -54,11 +54,11 @@ function sendStartMessage(ctx) {
 }
 
 bot.command("help", (ctx) => {
-    console.log(ctx.chat);
     bot.telegram.sendMessage(ctx.chat.id, "Escribí /start");
 });
 //http://localhost:3000/quotes
 //https://como-te-dicen-a-bot-server.herokuapp.com/quotes
+
 async function fetchQuote() {
     const res = await axios.get(
         "https://como-te-dicen-a-bot-server.herokuapp.com/quotes"
@@ -82,7 +82,7 @@ bot.mention(async (ctx) => {
     const anotherUser = ctx.message.text
         .replace("@ComoTeDicenABot", "")
         .replace(/\s+/g, "");
-    const probabilityOfSetPhrase = Math.floor(Math.random() * 10);
+    const probabilityOfSetPhrase = Math.floor(Math.random() * 100);
     const quote = await fetchQuote();
     //console.log(ctx.chat.type);//supergroup
     // console.log(ctx.update.message.from.username); //returns my username
@@ -96,20 +96,26 @@ bot.mention(async (ctx) => {
 
     if (ctx.message.text.length > thisBot.length) {
         //Another person has ben tagged
-        if (anotherUser === "@MengOtto" && probabilityOfSetPhrase < 8) {
+        if (anotherUser === "@MengOtto" && probabilityOfSetPhrase < 80) {
+            //If that person is Fran, answer this:
             ctx.reply(
                 `Saben como le dicen a ${anotherUser}? Mono manco, porque pela la banana con el culo`
             );
         } else {
-            if (probabilityOfSetPhrase < 2) {
+            //If it's literally anyone else in the world
+            if (probabilityOfSetPhrase < 20) {
+                //Small probability that the bot tries to defend your friend :)
                 let nameOfUser;
                 if (anotherUser.startsWith("@")) {
+                    //If that person was tagged as @Person
                     nameOfUser = anotherUser.slice(1);
                 } else {
+                    //If that person was tagged as Person
                     nameOfUser = anotherUser;
                 }
                 ctx.reply(`${nameOfUser} le dicen, no sean malos :(`);
             } else {
+                //Bot roasts you
                 ctx.reply(`Saben como le dicen a ${anotherUser}? ${quote}`);
             }
         }
@@ -117,16 +123,20 @@ bot.mention(async (ctx) => {
         //Bot has been tagged alone
         const userInSuperGroup = ctx.update.message.from.username;
         if (userInSuperGroup) {
-            if (probabilityOfSetPhrase < 2) {
+            //If it was done in a group chat
+            if (probabilityOfSetPhrase < 20) {
+                //Bot tries to resist the urge to roast you
                 ctx.reply(
                     `Sabes como te dicen a vos @${userInSuperGroup}? ${userInSuperGroup}, no seas malo con vos mismo :(`
                 );
             } else {
+
                 ctx.reply(
                     `Sabes como te dicen a vos @${userInSuperGroup}? ${quote}`
                 );
             }
         } else {
+            //Bot roasts you in a private chat, apparently ctx.chat.username doesn't work in group chats for some reason?
             ctx.reply(
                 `Sabes como te dicen a vos @${ctx.chat.username}? ${quote}`
             );
@@ -148,10 +158,6 @@ bot.action("quote", async (ctx) => {
 });
 
 /*--------------------------------------------------------------- */
-// app.use(express.static(path.join(__dirname, "./bot")));
-// app.get("*", (req, res) => {
-//     res.sendFile(path.join(__dirname, "./bot"));
-// });
 
 const start = async () => {
     try {
