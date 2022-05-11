@@ -103,7 +103,7 @@ bot.mention(async (ctx) => {
             const quote = await fetchQuote();
             if (probabilityOfSetPhrase < 2) {
                 ctx.reply(
-                    `Sabes como te dicen a vos @${userInSuperGroup}? ${userInSuperGroup} no seas malo con vos mismo :(`
+                    `Sabes como te dicen a vos @${userInSuperGroup}? ${userInSuperGroup}, no seas malo con vos mismo :(`
                 );
             } else {
                 ctx.reply(
