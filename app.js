@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 const quotes = require("./frases.json");
 
@@ -10,6 +10,14 @@ app.get("/quotes", (req, res) => {
     res.json({ quote: quotes[index] });
 });
 
-app.listen(PORT, () => {
-    console.log(`http://localhost:${PORT}`);
-});
+const start = async () => {
+    try {
+        app.listen(PORT, () => {
+            console.log(`http://localhost:${PORT}`);
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+start();
