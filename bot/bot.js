@@ -132,12 +132,11 @@ bot.action("quote", async (ctx) => {
     ctx.reply(`Sabes como te dicen a vos @${ctx.chat.username}? ${quote}`);
 });
 
-
-
 const start = async () => {
     try {
         app.listen(PORT, () => {
             bot.launch();
+            console.log("Correctly running");
         });
     } catch (err) {
         console.log(err);
