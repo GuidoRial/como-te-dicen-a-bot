@@ -74,6 +74,21 @@ bot.hears("Como me dicen?", async (ctx) => {
     ctx.reply(`Sabes como te dicen a vos? ${quote}`);
 });
 
+bot.hears("Cómo me dicen?", async (ctx) => {
+    const quote = await fetchQuote();
+    ctx.reply(`Sabes como te dicen a vos? ${quote}`);
+});
+
+bot.hears("como me dicen?", async (ctx) => {
+    const quote = await fetchQuote();
+    ctx.reply(`Sabes como te dicen a vos? ${quote}`);
+});
+
+bot.hears("cómo me dicen?", async (ctx) => {
+    const quote = await fetchQuote();
+    ctx.reply(`Sabes como te dicen a vos? ${quote}`);
+});
+
 /**
  * For group chats
  */
